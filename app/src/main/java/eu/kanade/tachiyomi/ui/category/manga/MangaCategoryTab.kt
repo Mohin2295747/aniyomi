@@ -11,6 +11,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.category.MangaCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
+import eu.kanade.presentation.category.components.CategoryQuickAccessDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
 import eu.kanade.presentation.components.TabContent
 import kotlinx.collections.immutable.toImmutableList
@@ -40,6 +41,8 @@ fun Screen.mangaCategoryTab(): TabContent {
                     onClickHide = screenModel::hideCategory,
                     onClickDelete = { screenModel.showDialog(MangaCategoryDialog.Delete(it)) },
                     onChangeOrder = screenModel::changeOrder,
+                    // NEW: Added parameter for quick category access
+                    onShowQuickCategorySelector = { screenModel.showDialog(MangaCategoryDialog.QuickAccess) },
                 )
 
                 when (val dialog = successState.dialog) {
@@ -64,6 +67,18 @@ fun Screen.mangaCategoryTab(): TabContent {
                             onDismissRequest = screenModel::dismissDialog,
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
                             category = dialog.category.name,
+                        )
+                    }
+                    // NEW: Added QuickAccess dialog case
+                    MangaCategoryDialog.QuickAccess -> {
+                        CategoryQuickAccessDialog(
+                            onDismissRequest = screenModel::dismissDialog,
+                            categories = successState.categories.toImmutableList(),
+                            onCategorySelected = { category ->
+                                screenModel.dismissDialog()
+                                // Note: Navigation to category content would be handled here
+                                // This might require additional integration with your app's navigation
+                            }
                         )
                     }
                 }
