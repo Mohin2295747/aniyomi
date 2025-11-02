@@ -137,6 +137,8 @@ sealed interface MangaCategoryDialog {
     data object Create : MangaCategoryDialog
     data class Rename(val category: Category) : MangaCategoryDialog
     data class Delete(val category: Category) : MangaCategoryDialog
+    // NEW: Added QuickAccess dialog type
+    data object QuickAccess : MangaCategoryDialog
 }
 
 sealed interface MangaCategoryEvent {
