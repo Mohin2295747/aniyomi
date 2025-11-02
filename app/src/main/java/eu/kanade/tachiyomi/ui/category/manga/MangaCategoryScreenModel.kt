@@ -137,6 +137,8 @@ sealed interface MangaCategoryDialog {
     data object Create : MangaCategoryDialog
     data class Rename(val category: Category) : MangaCategoryDialog
     data class Delete(val category: Category) : MangaCategoryDialog
+    // NEW: Added QuickAccess dialog type
+    data object QuickAccess : MangaCategoryDialog
 }
 
 sealed interface MangaCategoryEvent {
@@ -157,5 +159,9 @@ sealed interface MangaCategoryScreenState {
 
         val isEmpty: Boolean
             get() = categories.isEmpty()
+        
+        // NEW: Helper property to check if quick access should be shown
+        val showQuickAccess: Boolean
+            get() = categories.size >= 5
     }
 }
